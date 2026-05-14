@@ -1,0 +1,69 @@
+import psycopg2
+import bleach
+from flask import current_app
+import logging
+
+def connection():
+    return psycopg2.connect(
+        database = current_app.config["DB_NAME"],
+        user = current_app.config["DB_USER"],
+        password = current_app.config["DB_PASSWORD"],
+        host = current_app.config["DB_HOST"],
+        port = current_app.config["DB_PORT"]
+    )
+
+def get_students():
+    try:
+        with connection() as db:
+            with db.cursor() as c:
+                c.execute("SELECT * FROM students ORDER BY id DESC")
+                return c.fetchall()
+    except psycopg2.Error:
+        current_app.logger.exception("Failed to fetch students")
+        raise 
+
+def add_students(name):
+    try:
+        with connection() as db:
+            with db.cursor() as c:
+                c.execute("INSERT INTO students(name) VALUES (%s)", (bleach.clean(name),))
+    except psycopg2.Error:
+        current_app.logger.exception("Failed to add student")
+        raise
+
+def get_courses():
+    try:
+        with connection() as db:
+            with db.cursor() as c:
+                c.execute("SELECT * FROM courses")
+                return c.fetchall()
+    except psycopg2.Error:
+        current_app.logger.exception("Failed to fetch courses")
+        raise 
+
+def get_grades(): 
+    try:
+        with connection() as db:
+            with db.cursor() as c:
+                c.execute("""
+                    SELECT student.name, grades.course, grades.grade
+                    FROM student
+                    JOIN grades ON student.id = grades.student_id
+                    ORDER BY grades.grade
+                """)
+                return c.fetchall()
+    except psycopg2.Error:
+        current_app.logger.exception("Failed to fetch students' grades")
+        raise 
+
+def add_grades(student_id, course, grade):
+    try:
+        with connection() as db:
+            with db.cursor() as c:
+                c.execute("INSERT INTO grades(student_id, course, grade) VALUES (%s, %s, %s)", 
+                          (student_id, course, grade)
+                          )
+    except psycopg2.Error:
+        current_app.logger.exception("Failed to add grade")
+        raise
+

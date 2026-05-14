@@ -17,7 +17,7 @@ def create_app():
         app.config["LOG_FILE"], maxBytes= 10240, backupCount=5
         )
     
-    file_handler.setLevel(logging.INFO)
+    file_handler.setLevel(app.config["LOG_LEVEL"])
 
     formatter = logging.Formatter(
     '%(asctime)s %(levelname)s: %(message)s'
@@ -28,5 +28,13 @@ def create_app():
     app.logger.setLevel(logging.INFO)
 
     app.logger.info("App started")
+
+    #Registering route file
+    from .routes import main_bp
+    app.register_blueprint(main_bp)
+
+    #Registering error_handler
+    from .error import error_handlers
+    error_handlers(app)
 
     return app
