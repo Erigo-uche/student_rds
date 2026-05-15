@@ -16,7 +16,7 @@ def get_students():
     try:
         with connection() as db:
             with db.cursor() as c:
-                c.execute("SELECT * FROM students ORDER BY id DESC")
+                c.execute("SELECT * FROM students ORDER BY student_id DESC")
                 return c.fetchall()
     except psycopg2.Error:
         current_app.logger.exception("Failed to fetch students")
@@ -46,9 +46,9 @@ def get_grades():
         with connection() as db:
             with db.cursor() as c:
                 c.execute("""
-                    SELECT student.name, grades.course, grades.grade
-                    FROM student
-                    JOIN grades ON student.id = grades.student_id
+                    SELECT students.full_name, grades.course_code, grades.grade
+                    FROM grades
+                    JOIN students ON grades.student_id = students.student_id
                     ORDER BY grades.grade
                 """)
                 return c.fetchall()
@@ -56,12 +56,12 @@ def get_grades():
         current_app.logger.exception("Failed to fetch students' grades")
         raise 
 
-def add_grades(student_id, course, grade):
+def add_grades(student_id, course_id, grade):
     try:
         with connection() as db:
             with db.cursor() as c:
-                c.execute("INSERT INTO grades(student_id, course, grade) VALUES (%s, %s, %s)", 
-                          (student_id, course, grade)
+                c.execute("INSERT INTO grades(student_id, course_id, grade) VALUES (%s, %s, %s)", 
+                          (student_id, course_id, grade)
                           )
     except psycopg2.Error:
         current_app.logger.exception("Failed to add grade")

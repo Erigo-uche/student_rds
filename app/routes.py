@@ -15,8 +15,8 @@ TABLE_CONFIG = {
     },
 
     "grades": {
-        "Headers": ["Name", "Course", "Grade"],
-        "form-type": ["Student_id", "Course", "Grade"]
+        "Headers": ["Name", "Course", "Grade", "Rec_at"],
+        "form-type": ["Student_id", "Course_id", "Grade"]
     }
 }
 
@@ -62,13 +62,13 @@ def post():
             db.add_students(name)
         elif table == "grades":
             student_id = request.form.get("Student_id")
-            course = request.form.get("Course")
+            course_id = request.form.get("Course_id")
             grade = request.form.get("Grade")
             
-            if not all([student_id, course, grade]):
+            if not all([student_id, course_id, grade]):
                 return "All fields required", 400
             
-            db.add_grades(student_id, course, grade)
+            db.add_grades(student_id, course_id, grade)
         
         return redirect(url_for("main.main", table=table))
     
