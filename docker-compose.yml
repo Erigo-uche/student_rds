@@ -13,9 +13,9 @@ services:
       - .env
 
     environment:
-      - POSTGRES_USER: ${DB_USER}
-      - POSTGRES_PASSWORD: ${DB_PASSWORD}
-      - POSTGRES_DB: ${DB_NAME}
+      - POSTGRES_USER:${DB_USER}
+      - POSTGRES_PASSWORD:${DB_PASSWORD}
+      - POSTGRES_DB:${DB_NAME}
     
     ports:
       - "5432:5432"
@@ -43,6 +43,19 @@ services:
 
     depends_on:
       - db
+    
+    develop:
+      watch:
+
+        - action: sync
+          path: .
+          target: /add
+
+        - action: rebuild
+          path: requirement.txt
+
+
+
 
 volumes:
   postgres_data:

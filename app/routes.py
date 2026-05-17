@@ -68,7 +68,7 @@ def post():
             if not all([student_id, course, score]):
                 return "All fields required", 400
             
-            db.add_grades(student_id, course, )
+            db.add_grades(student_id, course, score)
         
         return redirect(url_for("main.main", table=table))
     
