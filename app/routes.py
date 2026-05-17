@@ -20,7 +20,7 @@ TABLE_CONFIG = {
     }
 }
 
-@main_bp.route("/", method=["GET"])
+@main_bp.route("/", methods=["GET"])
 def main():
     table = request.args.get("table", "students")
 
