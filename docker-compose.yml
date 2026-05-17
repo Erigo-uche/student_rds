@@ -22,7 +22,10 @@ services:
 
     volumes:
       - postgres_data:/var/lib/postgresql/data
+
       - ./database/init.sql:/docker-entrypoint-initdb.d/init.sql
+
+      - .database/seed:/seed
 
     
    web:

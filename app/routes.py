@@ -5,7 +5,7 @@ main_bp = Blueprint("main", __name__)
 
 TABLE_CONFIG = {
     "students": {
-        "Headers": ["ID, Name"],
+        "Headers": ["ID", "Name"],
         "form_type": ["Name"]
     },
 
@@ -15,8 +15,8 @@ TABLE_CONFIG = {
     },
 
     "grades": {
-        "Headers": ["Name", "Course", "Grade", "Rec_at"],
-        "form-type": ["Student_id", "Course_id", "Grade"]
+        "Headers": ["Name", "Course", "score", "Grade", "Rec_at"],
+        "form-type": ["Student_id", "Course_code", "Score"]
     }
 }
 
@@ -62,13 +62,13 @@ def post():
             db.add_students(name)
         elif table == "grades":
             student_id = request.form.get("Student_id")
-            course_id = request.form.get("Course_id")
-            grade = request.form.get("Grade")
+            course = request.form.get("Course_code")
+            score = request.form.get("Score")
             
-            if not all([student_id, course_id, grade]):
+            if not all([student_id, course, score]):
                 return "All fields required", 400
             
-            db.add_grades(student_id, course_id, grade)
+            db.add_grades(student_id, course, )
         
         return redirect(url_for("main.main", table=table))
     
