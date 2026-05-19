@@ -8,8 +8,13 @@ FROM '/seed/student.csv'
 DELIMITER ','
 CSV HEADER;
 
+SELECT setval(
+    pg_get_serial_sequence('students', 'student_id'),
+    MAX(student_id)
+) FROM students;
+
 CREATE TABLE courses (
-    course_code VARCHAR(10) PRIMARY KEY,
+    course_code VARCHAR(6) PRIMARY KEY,
     course VARCHAR(100) NOT NULL
 );
 
@@ -24,7 +29,7 @@ CREATE TABLE grades (
     student_id INT NOT NULL,
     course_code VARCHAR(6) NOT NULL,
     score DECIMAL(5,2) CHECK (score BETWEEN 0 AND 100),
-    grade CHAR(1) GENERATED AS (
+    grade CHAR(1) GENERATED ALWAYS AS (
         CASE 
             WHEN score >= 70 THEN 'A'
             WHEN score >= 60 THEN 'B'
@@ -45,7 +50,7 @@ CREATE TABLE grades (
 
     CONSTRAINT fk_course
         FOREIGN KEY(course_code)
-        REFERENCES course(course_code)
+        REFERENCES courses(course_code)
         ON DELETE CASCADE, 
 
     CONSTRAINT unique_student

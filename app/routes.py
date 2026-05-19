@@ -16,7 +16,7 @@ TABLE_CONFIG = {
 
     "grades": {
         "Headers": ["Name", "Course", "score", "Grade", "Rec_at"],
-        "form-type": ["Student_id", "Course_code", "Score"]
+        "form_type": ["Student_id", "Course_code", "Score"]
     }
 }
 
@@ -33,7 +33,7 @@ def main():
             info = db.get_grades()
         else:
             table = "students"
-            info = db.get_students
+            info = db.get_students()
 
         config = TABLE_CONFIG.get(table, TABLE_CONFIG["students"])
 
