@@ -46,7 +46,7 @@ def get_grades():
         with connection() as db:
             with db.cursor() as c:
                 c.execute("""
-                    SELECT students.fullname, grades.course_code, grade.score, grades.grade
+                    SELECT students.fullname, grades.course_code, grades.score, grades.grade
                     FROM grades
                     JOIN students ON grades.student_id = students.student_id
                     ORDER BY grades.grade
@@ -60,7 +60,7 @@ def add_grades(student_id, course_code, score):
     try:
         with connection() as db:
             with db.cursor() as c:
-                c.execute("INSERT INTO grades(student_id, course_id, score) VALUES (%s, %s, %s)", 
+                c.execute("INSERT INTO grades(student_id, course_code, score) VALUES (%s, %s, %s)", 
                           (student_id, course_code, score)
                           )
     except psycopg2.Error:
