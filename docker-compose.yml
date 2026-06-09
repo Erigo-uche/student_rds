@@ -8,6 +8,9 @@ services:
 
     restart: always
 
+    networks:
+      - shared_db
+
     env_file:
       - .env
 
@@ -34,6 +37,9 @@ services:
 
     restart: always
 
+    networks:
+      - shared_db
+
     env_file:
       - .env
 
@@ -48,7 +54,7 @@ services:
 
         - action: sync
           path: .
-          target: /add
+          target: /app
 
         - action: rebuild
           path: requirement.txt
@@ -58,3 +64,7 @@ services:
 
 volumes:
   postgres_data:
+
+networks:
+   shared_db:
+      name: shared_db
