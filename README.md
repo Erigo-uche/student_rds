@@ -11,4 +11,10 @@ Features:
   
 --
 
-![record's page](images/home.png)
+## System Pages
+
+![Names](images/home.png)
+
+![courses](images/courses_pg.png)
+
+![Grades](images/grades_pg.png)
